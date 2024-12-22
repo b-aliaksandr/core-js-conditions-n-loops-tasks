@@ -161,8 +161,43 @@ function convertToRomanNumerals(num) {
  *  '10,5'    => 'one zero point five'
  *  '1950.2'  => 'one nine five zero point two'
  */
-function convertNumberToString(/* numberStr */) {
-  throw new Error('Not implemented');
+function convertNumberToString(numberStr) {
+  const digitNames = [
+    'zero',
+    'one',
+    'two',
+    'three',
+    'four',
+    'five',
+    'six',
+    'seven',
+    'eight',
+    'nine',
+  ];
+  const signsNames = {
+    '-': 'minus',
+    '.': 'point',
+    ',': 'point',
+  };
+  const isSign = (ch) => ch === '-' || ch === '.' || ch === ',';
+
+  const firstCh = numberStr[0];
+  let result = isSign(firstCh) ? signsNames[firstCh] : digitNames[firstCh];
+
+  for (let i = 1; i < numberStr.length; i += 1) {
+    const ch = numberStr[i];
+    result += ' ';
+
+    switch (isSign(ch)) {
+      case true:
+        result += signsNames[ch];
+        break;
+      default:
+        result += digitNames[ch];
+    }
+  }
+
+  return result;
 }
 
 /**
