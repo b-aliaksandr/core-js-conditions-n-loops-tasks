@@ -352,8 +352,81 @@ function getBalanceIndex(arr) {
  *          [10, 9,  8,  7]
  *        ]
  */
-function getSpiralMatrix(/* size */) {
-  throw new Error('Not implemented');
+function getSpiralMatrix(size) {
+  const resultArr = [];
+
+  for (let i = 0; i < size; i += 1) {
+    const row = [];
+    for (let j = 0; j < size; j += 1) {
+      row[j] = 0;
+    }
+    resultArr[i] = row;
+  }
+
+  let num = 1;
+  let curRowIndex = 0;
+  let curColumnIndex = 0;
+
+  const fillFirstLine = () => {
+    const amount = size;
+    for (let i = 0; i < amount; i += 1) {
+      resultArr[curRowIndex][curColumnIndex] = num;
+      curColumnIndex += 1;
+      num += 1;
+    }
+    curColumnIndex -= 1;
+  };
+
+  fillFirstLine();
+
+  let step = 2;
+  const amountSteps = size * 2;
+  let amountItemsOfStep = size - 1;
+  let countSwitchDirection = 1;
+  let isReverseDirection = false;
+  let isRowDirection = false;
+
+  const fillLine = (amount) => {
+    const updateIndex = (index) => (isReverseDirection ? index - 1 : index + 1);
+    const fixIndex = (index) => (isReverseDirection ? index + 1 : index - 1);
+
+    if (isRowDirection) {
+      curColumnIndex = updateIndex(curColumnIndex);
+      for (let i = 0; i < amount; i += 1) {
+        resultArr[curRowIndex][curColumnIndex] = num;
+        curColumnIndex = updateIndex(curColumnIndex);
+        num += 1;
+      }
+      curColumnIndex = fixIndex(curColumnIndex);
+    } else {
+      curRowIndex = updateIndex(curRowIndex);
+      for (let i = 0; i < amount; i += 1) {
+        resultArr[curRowIndex][curColumnIndex] = num;
+        curRowIndex = updateIndex(curRowIndex);
+        num += 1;
+      }
+      curRowIndex = fixIndex(curRowIndex);
+    }
+  };
+
+  while (step < amountSteps) {
+    fillLine(amountItemsOfStep);
+
+    isRowDirection = !isRowDirection;
+    countSwitchDirection += 1;
+    if (countSwitchDirection === 2) {
+      isReverseDirection = !isReverseDirection;
+      countSwitchDirection = 0;
+    }
+
+    if (step % 2 !== 0) {
+      amountItemsOfStep = amountItemsOfStep > 1 ? amountItemsOfStep - 1 : 1;
+    }
+
+    step += 1;
+  }
+
+  return resultArr;
 }
 
 /**
